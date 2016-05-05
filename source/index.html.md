@@ -24,7 +24,7 @@ If you would like to trial Lab Automated, please go to https://lab.nowsecure.com
 
 ## Authorization
 
-Request and response bodies are JSON encoded.
+Request and response bodies are json encoded.
 
 All requests require an OAuth access token. You can find your access token by going to https://lab-beta.nowsecure.com/account. Authorization tokens are currently authorized for 24 hours.
 
