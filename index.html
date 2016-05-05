@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>API Reference</title>
 
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
     <style>
       .highlight table td { padding: 5px; }
 .highlight table pre { margin: 0; }
@@ -88,6 +86,8 @@
   color: #90a959;
 }
     </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
       <script src="javascripts/all.js"></script>
   </head>
 
@@ -121,161 +121,255 @@
       <div class="content">
         <h1 id="introduction">Introduction</h1>
 
-<p>Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.</p>
+<p>Welcome to the Lab Automated API Documentation. Lab Automated allows faster, more reliable static and dynamic security testing for mobile apps. Ongoing updates with our API will be kept up to date as functionality is released.</p>
 
-<p>We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<p>If you would like to trial Lab Automated, please go to https://lab.nowsecure.com and request access to our closed beta. You will be contacted shortly after by one of our Sales Representatives to set up a trial.</p>
 
-<p>This example API documentation page was created with <a href="https://github.com/tripit/slate">Slate</a>. Feel free to edit it and use it as a base for your own API&rsquo;s documentation.</p>
+<h2 id="authorization">Authorization</h2>
 
-<h1 id="authentication">Authentication</h1>
+<p>Request and response bodies are json encoded.</p>
 
-<blockquote>
-<p>To authorize, use this code:</p>
-</blockquote>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
+<p>All requests require an OAuth access token. You can find your access token by going to https://lab-beta.nowsecure.com/account. Authorization tokens are currently authorized for 24 hours.</p>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
+<p>All requests should include:</p>
 
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"api_endpoint_here"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre>
+<p><code class="prettyprint">Authorization: Bearer {NS_TOKEN}</code></p>
 
-<blockquote>
-<p>Make sure to replace <code class="prettyprint">meowmeowmeow</code> with your API key.</p>
-</blockquote>
+<h2 id="api-host">API Host</h2>
 
-<p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="http://example.com/developers">developer portal</a>.</p>
+<p>The Lab Automated API is hosted at:</p>
 
-<p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
+<p>https://lab-api.nowsecure.com</p>
 
-<p><code class="prettyprint">Authorization: meowmeowmeow</code></p>
+<h1 id="account">Account</h1>
 
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
+<p>An <code class="prettyprint">Account</code> represents a Lab Automated account. Multiple accounts can be associated with a single instance of Lab Automated all with the ability to run assessments or view application results.</p>
 
-<h1 id="kittens">Kittens</h1>
+<h2 id="view-account-details">View Account Details</h2>
 
-<h2 id="get-all-kittens">Get All Kittens</h2>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
+<p>You can view account details for Lab Automated using the <code class="prettyprint">GET /account</code> path.</p>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span>
-</code></pre>
-<pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
+<p><code class="prettyprint">shell
+    curl -H &quot;Authorization: Bearer $NS_TOKEN&quot; -X GET $HOST/account
+</code></p>
 
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-</code></pre>
-<pre class="highlight shell"><code>curl <span class="s2">"http://example.com/api/kittens"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre>
-
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
+<p>The response will contain the period in which your account will be active along with the number of applications and assessments left on your account.</p>
+<pre class="highlight json"><code><span class="w">    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"period"</span><span class="p">:</span><span class="w"> </span><span class="mi">172800</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"limits"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"assessments"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"363df3a1-0e8b-4960-bb6e-cc09aced37a1"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
-<p>This endpoint retrieves all kittens.</p>
+<h2 id="list-of-current-account-users">List of Current Account Users</h2>
 
-<h3 id="http-request">HTTP Request</h3>
-
-<p><code class="prettyprint">GET http://example.com/api/kittens</code></p>
-
-<h3 id="query-parameters">Query Parameters</h3>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>include_cats</td>
-<td>false</td>
-<td>If set to true, the result will also include cats.</td>
-</tr>
-<tr>
-<td>available</td>
-<td>true</td>
-<td>If set to false, the result will include kittens that have already been adopted.</td>
-</tr>
-</tbody></table>
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-<h2 id="get-a-specific-kitten">Get a Specific Kitten</h2>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
+<p>You can view users that are associated with an account using <code class="prettyprint">GET /account/user/</code>.</p>
+<pre class="highlight shell"><code>    curl -H <span class="s2">"Authorization: Bearer </span><span class="nv">$NS_TOKEN</span><span class="s2">"</span> -X GET <span class="nv">$HOST</span>/account/user/
 </code></pre>
 
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-</span><span class="p">}</span><span class="w">
+<p>The response will contain the <code class="prettyprint">user id</code>, <code class="prettyprint">email</code>, and permissions for the user under <code class="prettyprint">scopes</code>. The <code class="prettyprint">account id</code> will also be returned. Each user will be associated with the same <code class="prettyprint">account</code></p>
+<pre class="highlight json"><code><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"66a46874-eab4-4871-83c9-3b586968547c"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@nowsecure.com"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"scopes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"user:login"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nt">"account"</span><span class="p">:</span><span class="w"> </span><span class="s2">"363df3a1-0e8b-4960-bb6e-cc09aced37a1"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
-<p>This endpoint retrieves a specific kitten.</p>
+<h2 id="view-user-profile">View User Profile</h2>
 
-<aside class="warning">Inside HTML code blocks like this one, you can&rsquo;t use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+<p>You can view details about a specific user. Using <code class="prettyprint">GET /account/user/{id}</code>, you can view that users <code class="prettyprint">name</code>, <code class="prettyprint">email</code>, <code class="prettyprint">scope</code> also known as user permissions, and which <code class="prettyprint">account</code> they are associated with.</p>
+<pre class="highlight shell"><code>  curl -H <span class="s2">"Authorization: Bearer </span><span class="nv">$NS_TOKEN</span><span class="s2">"</span> -X GET <span class="nv">$HOST</span>/account/user/27a03ce7-303f-440f-b02a-de2df2c41561
+</code></pre>
 
-<h3 id="http-request">HTTP Request</h3>
+<p>The .json response will include <code class="prettyprint">name</code>, <code class="prettyprint">email</code>, <code class="prettyprint">scope</code>, and associated <code class="prettyprint">account</code></p>
+<pre class="highlight json"><code><span class="w">    </span><span class="p">{</span><span class="w">
+     </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"27a03ce7-303f-440f-b02a-de2df2c41561"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Charlie Painchaud"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@nowsecure.com"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"scopes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+       </span><span class="s2">"user:login"</span><span class="w">
+     </span><span class="p">],</span><span class="w">
+     </span><span class="nt">"account"</span><span class="p">:</span><span class="w"> </span><span class="s2">"60b923d9-7d14-4208-9630-f13075a58ffd"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre>
 
-<p><code class="prettyprint">GET http://example.com/kittens/&lt;ID&gt;</code></p>
+<h2 id="inviting-a-user">Inviting a User</h2>
 
-<h3 id="url-parameters">URL Parameters</h3>
+<p>You can invite a user to join your Lab Automated account using <code class="prettyprint">POST /account/invite/</code>. Users currently will have the same scope and will upload apps and run assessments against the <code class="prettyprint">Account</code> limits.</p>
 
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>ID</td>
-<td>The ID of the kitten to retrieve</td>
-</tr>
-</tbody></table>
+<h2 id="pending-invites">Pending Invites</h2>
+
+<p>You can view a list of pending invites using <code class="prettyprint">GET /account/invite/</code>. This will return the <code class="prettyprint">name</code> and <code class="prettyprint">email</code> of each user that has been invited to the <code class="prettyprint">account</code></p>
+
+<h2 id="removing-a-user">Removing a User</h2>
+
+<p>Conversely, you can remove a user from your account using <code class="prettyprint">DELETE /account/user/{id}</code>. The user <code class="prettyprint">id</code> is returned in the <code class="prettyprint">GET /account/user/</code> response.</p>
+
+<h1 id="applications">Applications</h1>
+
+<p>An <code class="prettyprint">Application</code> or a binary is what Lab Automated will be performing the NowSecure Security Assessment against. An <code class="prettyprint">Application</code> is a fully compiled .apk or .ipa file that will be installed onto real devices and security tested statically and dynamically.</p>
+
+<h2 id="submitting-an-application">Submitting an Application</h2>
+
+<p>Using <code class="prettyprint">POST /build/</code> will create a new application and kick off an assessment with the previously set configuration options. If it is the first time an application has been uploaded, the assessment will start with the default configuration options.</p>
+<pre class="highlight shell"><code>curl -H <span class="s2">"Authorization: Bearer </span><span class="nv">$NS_TOKEN</span><span class="s2">"</span> -X POST <span class="nv">$HOST</span>/build/ --data-binary @bin.apk
+</code></pre>
+
+<h2 id="view-all-applications">View all Applications</h2>
+
+<p>You can list all of the applications associated with an account using <code class="prettyprint">GET /app/</code>.</p>
+<pre class="highlight shell"><code>    curl -H <span class="s2">"Authorization: Bearer </span><span class="nv">$NS_TOKEN</span><span class="s2">"</span> -X GET <span class="nv">$HOST</span>/app/
+</code></pre>
+
+<p>For each <code class="prettyprint">Application</code> the response will contain the apps <code class="prettyprint">platform</code>, <code class="prettyprint">package</code> name, associated <code class="prettyprint">account</code>, and <code class="prettyprint">created</code> date.</p>
+<pre class="highlight json"><code><span class="w">    </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"platform"</span><span class="p">:</span><span class="w"> </span><span class="s2">"android"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"package"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fuzion24.dynamictestapp"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"account"</span><span class="p">:</span><span class="w"> </span><span class="s2">"363df3a1-0e8b-4960-bb6e-cc09aced37a1"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-04-07T20:29:15.769Z"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="create-an-application-resource">Create an Application Resource</h2>
+
+<p>Using <code class="prettyprint">POST /app/</code>, you can create an application resource that does not have a binary associated with it. To run an assessment you must upload a binary with the same <code class="prettyprint">package</code> name and <code class="prettyprint">platform</code>.</p>
+<pre class="highlight shell"><code>    curl -H <span class="s2">"Authorization: Bearer </span><span class="nv">$NS_TOKEN</span><span class="s2">"</span> -X POST <span class="nv">$HOST</span>/app/ -d <span class="s1">'{"platform": "android", "package": "com.example.app"}'</span>
+</code></pre>
+
+<p>Like the application response, when an application resource is created it will return the apps <code class="prettyprint">platform</code>, <code class="prettyprint">package</code> name, associated <code class="prettyprint">account</code>, and <code class="prettyprint">created</code> date.</p>
+<pre class="highlight json"><code><span class="w">    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"platform"</span><span class="p">:</span><span class="w"> </span><span class="s2">"android"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"package"</span><span class="p">:</span><span class="w"> </span><span class="s2">"com.example.app"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"account"</span><span class="p">:</span><span class="w"> </span><span class="s2">"363df3a1-0e8b-4960-bb6e-cc09aced37a1"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-04-08T19:06:00.257Z"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="get-application-details">Get Application Details</h2>
+
+<p>You can also get specific application details  using <code class="prettyprint">GET /app/{platform}/{package}</code>.</p>
+<pre class="highlight shell"><code>    curl -H <span class="s2">"Authorization: Bearer </span><span class="nv">$NS_TOKEN</span><span class="s2">"</span> -X GET <span class="nv">$HOST</span>/app/android/com.example.app
+</code></pre>
+
+<p>The response will contain the apps <code class="prettyprint">platform</code>, <code class="prettyprint">package</code> name, associated <code class="prettyprint">account</code>, and <code class="prettyprint">created</code> date.</p>
+<pre class="highlight json"><code><span class="w">    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"platform"</span><span class="p">:</span><span class="w"> </span><span class="s2">"android"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"package"</span><span class="p">:</span><span class="w"> </span><span class="s2">"com.example.app"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"account"</span><span class="p">:</span><span class="w"> </span><span class="s2">"363df3a1-0e8b-4960-bb6e-cc09aced37a1"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-04-08T19:06:00.257Z"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="view-application-configuration">View Application Configuration</h2>
+
+<p>Application configuration is set by <code class="prettyprint">package</code> name. Each <code class="prettyprint">package</code> can have its own individual application configuration.</p>
+
+<p>You can view a specific applications configuration using <code class="prettyprint">GET /app/{platform}/{package}/config</code></p>
+<pre class="highlight shell"><code>    curl -H <span class="s2">"Authorization: Bearer </span><span class="nv">$NS_TOKEN</span><span class="s2">"</span> -X GET <span class="nv">$HOST</span>/app/android/com.example.app/config
+</code></pre>
+
+<p>The response will show which configuration options are set for that specific package.</p>
+<pre class="highlight json"><code><span class="w">    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"dynamic"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"search_data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Franz Kafka"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="nt">"username"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fkafka"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="nt">"password"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"foobar"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"franzkafka@metamorphosis.com"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nt">"config_options"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"multipass"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nt">"static"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="set-application-configuration">Set Application Configuration</h2>
+
+<p>Using the <code class="prettyprint">POST /app/{platform}/{package}/config</code> endpoint will allow the configuration for a specific application package to be set.</p>
+
+<p>You can mark specific static tests <code class="prettyprint">&quot;static&quot;: { &quot;secure_random_check&quot;: &quot;false&quot; }</code> and this command will run every test except the secure random check.</p>
+
+<h3 id="android-static-tests">Android Static Tests</h3>
+<pre class="highlight plaintext"><code>    certificate_validity_check
+    debug_flag_check
+    keysize_check
+    master_key_check
+    obfuscation_check
+    secure_random_check
+    dynamic_code_loading_check
+    application_overprivileged_check
+    allow_backup_check
+    javascript_interface_check
+    urls_check
+    decode_apk_check
+    decompile_apk_check
+    get_app_files
+    get_native_methods
+    get_reflection_code
+    app_activities
+    main_activity
+</code></pre>
+
+<h3 id="multipass">Multipass</h3>
+
+<p>Multipass mode is a mode which causes analysis to be done on the application multiple times to allow different &ldquo;passes&rdquo; of analysis to occur. For example, if we are actively man-in-the-middling an application, we may not be able to exercise the full functionality of the app if the app is cert pinning. We could run the application with all cert validations disabled, but this would not give us any insight into whether or not the app was properly checking certs. In this way, the app would need to be ran multiple times with different analysis options with and without certificate validation killed. In it&rsquo;s current implementation, multipass does exactly this. It runs the app once while mitming allowing whatever TLS validations are in place to take over, and once more with certificate checking disabled.</p>
+<pre class="highlight shell"><code>    curl -H <span class="s2">"Authorization: Bearer </span><span class="nv">$NS_TOKEN</span><span class="s2">"</span> -X POST <span class="nv">$HOST</span>/app/android/com.example.app/config -d <span class="s1">'{
+      "dynamic": {
+        "search_data": {
+          "name": {
+            "value": "Franz Kafka"
+          },
+          "username": {
+            "value": "fkafka"
+          },
+          "password": {
+            "value": "foobar"
+          },
+          "email": {
+            "value": "franzkafka@metamorphosis.com"
+          }
+        },
+        "config_options": {
+          "multipass": true
+        }
+      },
+      "static": "true"
+    }'</span>
+</code></pre>
+
+<p>In this example the <code class="prettyprint">name</code>, <code class="prettyprint">username</code>, <code class="prettyprint">email</code>, and <code class="prettyprint">password</code> were set to the login credentials for the sample application. This will allow the UI Automator on the rig to successfully login to the application to further exercise the UI for test coverage.</p>
+
+<h2 id="trigger-application-assessment">Trigger Application Assessment</h2>
+
+<p>After changing the configurations, using <code class="prettyprint">POST /app/{platform}/{package}/assessment/</code> will trigger an assessment on the most recent build of the application with the new configuration options.</p>
+<pre class="highlight shell"><code>    curl -H <span class="s2">"Authorization: Bearer </span><span class="nv">$NS_TOKEN</span><span class="s2">"</span> -X POST <span class="nv">$HOST</span>/app/platform/com.example.app/assessment/
+</code></pre>
+
+<p>The assessment endpoint will return a response containing that specific applications <code class="prettyprint">task</code> id.</p>
+
+<h2 id="view-assessment-report">View Assessment Report</h2>
+
+<p>You can view the assessment response in json using <code class="prettyprint">GET /app/{platform}/{package}/assessment/{task}/report</code>.</p>
+<pre class="highlight shell"><code>    curl -H <span class="s2">"Authorization: Bearer </span><span class="nv">$NS_TOKEN</span><span class="s2">"</span> -X GET <span class="nv">$HOST</span>/app/platform/com.example.app/assessment/task/report
+</code></pre>
+
+<p>The report contains all of the information from our NowSecure Automated Security Assessment. You can view the report formatted with descriptions and recommendations at https://lab.nowsecure.io/app/{platform}/{package}/assessment</p>
 
           <h1 id="errors">Errors</h1>
 
